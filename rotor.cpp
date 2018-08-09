@@ -1,20 +1,22 @@
 #include <fstream>
 #include "rotor.h"
 
+const int MAX_NUM_LETTER = 26;
+
 Rotor::Rotor( char* rotor_file,int rotor_pos_)
     :rotor_pos(rotor_pos_){
 
     std::ifstream in_file_rotor(rotor_file);
     int n, i =0;
     while(in_file_rotor >> n>> std::ws ){
-        if(i < 26){
+        if(i < MAX_NUM_LETTER){
             list_rotor_fwd[i] = n;
             list_rotor_bwd[n] = i;
-        }else if(i>= 26){
-            list_notch[i-26] = n;
+        }else if(i>= MAX_NUM_LETTER){
+            list_notch[i-MAX_NUM_LETTER] = n;
         }
         i++;
-	      number_notch = i-26;
+	      number_notch = i-MAX_NUM_LETTER;
     }
     in_file_rotor.close();
 }
@@ -24,7 +26,7 @@ int Rotor::getRotorPos(){
 }
 
 int Rotor::mod(int input){
-    return (input+26)%26;
+    return (input+MAX_NUM_LETTER)%MAX_NUM_LETTER;
 }
 
 int Rotor::mapToRotor_fwd(int input){
