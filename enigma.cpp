@@ -8,6 +8,8 @@
 
 using namespace std;
 
+const int MAX_NUM_LETTER = 26;
+
 Enigma::Enigma(int argc,  char* plugboard_file,char* reflector_file, vector<char*> rotor_file,  char* rotor_pos_file)
     :plugboard(plugboard_file), reflector(reflector_file){
 
@@ -40,7 +42,7 @@ Enigma::~Enigma(){
 }
 
 int Enigma::mod(int input){
-    return (input+26)%26;
+    return (input+MAX_NUM_LETTER)%MAX_NUM_LETTER;
 }
 
 char Enigma::encryptMessage(char single_char){
@@ -124,14 +126,14 @@ int Enigma::errorCheckPlugboard(char* plugboard_file){
 
 //############### check for self-contact, valid index ##########################
     ifstream in_stream2(plugboard_file);
-    int list_input_number[26],n, number_input = 0, number_input_=0;
+    int list_input_number[MAX_NUM_LETTER],n, number_input = 0, number_input_=0;
     while(in_stream2 >>n>>ws){
         //check index
-        if(n<0 || n > 25)
+        if(n<0 || n > MAX_NUM_LETTER-1)
             return 3;
 
         //check number input contacts to itself or not
-        if(number_input < 26){
+        if(number_input < MAX_NUM_LETTER){
             for(int j =0 ; j < number_input; j++)
                 if(list_input_number[j] == n)
                     return 5;
@@ -144,7 +146,7 @@ int Enigma::errorCheckPlugboard(char* plugboard_file){
 
 
 //################ check number of parameters is odd or not, and is in valid range or not
-    if((number_input%2)!= 0 || number_input > 26)
+    if((number_input%2)!= 0 || number_input > MAX_NUM_LETTER)
         return 6;
 
     return 0;
@@ -169,14 +171,14 @@ int Enigma::errorCheckRotor(vector<char*> rotor_file){
 
 //############### check for self-contact, valid index ##########################
         ifstream in_stream2(rotor_file[rotor_th]);
-        int list_rotor[26], n, number_para = 0, quantity_num_rotor = 0;
+        int list_rotor[MAX_NUM_LETTER], n, number_para = 0, quantity_num_rotor = 0;
         while(in_stream2 >> n>> ws ){
             //check index
-            if(n<0 || n > 25)
+            if(n<0 || n > MAX_NUM_LETTER-1)
                 return 3;
 
             //check number input contacts to itself or not
-            if(number_para < 26){
+            if(number_para < MAX_NUM_LETTER){
                 for(int j =0 ; j < number_para; j++)
                     if(list_rotor[j] == n)
                         return 7;
@@ -188,7 +190,7 @@ int Enigma::errorCheckRotor(vector<char*> rotor_file){
         in_stream2.close();
 
 //############### check for number of parameters is enough or not ##############
-        if(quantity_num_rotor < 26)
+        if(quantity_num_rotor < MAX_NUM_LETTER)
             return 14;
 
     }
@@ -210,14 +212,14 @@ int Enigma::errorCheckReflector(char* reflector_file){
 
 //############### check for self-contact, valid index ##########################
     ifstream in_stream2(reflector_file);
-    int list_input_number[26], n , number_input = 0, number_input_=0;
+    int list_input_number[MAX_NUM_LETTER], n , number_input = 0, number_input_=0;
     while(in_stream2 >>n>>ws){
         //check index
-        if(n<0 || n > 25)
+        if(n<0 || n > MAX_NUM_LETTER-1)
             return 3;
 
         //check number input contacts to itself or not
-        if(number_input_ < 26){
+        if(number_input_ < MAX_NUM_LETTER){
             for(int j =0 ; j < number_input_; j++)
                 if(list_input_number[j] == n)
                     return 9;
@@ -230,11 +232,11 @@ int Enigma::errorCheckReflector(char* reflector_file){
 
 //############### check for number of parameters and parameter #################
     //check number of parameters is odd or not, and is in valid range or not
-    if(number_input > 26 || (number_input%2)!=0 )
+    if(number_input > MAX_NUM_LETTER || (number_input%2)!=0 )
         return 12;
 
     //check number of parameters is enough or not
-    if(number_input < 26){
+    if(number_input < MAX_NUM_LETTER){
         return 10;
 
     }
@@ -250,7 +252,7 @@ int Enigma::errorCheckPosRotor(char* position_file){
     int p, i =0 , num_notch = 0;
     while(in_stream >> p >> ws){
 
-        if(p<0 || p > 25)
+        if(p<0 || p > MAX_NUM_LETTER-1)
             return 3;
 
 	      i++;
